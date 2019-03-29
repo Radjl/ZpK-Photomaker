@@ -21,7 +21,6 @@ import java.net.Authenticator;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Date;
-
 @Service
 public class Connector2 {
 
@@ -85,7 +84,8 @@ public class Connector2 {
             for (int i = 0; i < descNodes.getLength(); i++) {
                 System.out.println("Состояние луча: - " + descNodes.item(i).getTextContent());
 
-
+                String desktop = System.getProperty("user.home")+"\\Desktop";
+                System.out.println(desktop);
 
 
                 if (descNodes.item(i).getTextContent().equalsIgnoreCase(on)) {
@@ -111,6 +111,8 @@ public class Connector2 {
 
                         myAuthenticator.setUsername("admin");
                         myAuthenticator.setPassword("h31FF9c4");
+
+
 
 
                         String pathToSave = "C:\\Users\\sheludko\\Desktop\\temp\\img"+date.getTime()+".jpeg";
