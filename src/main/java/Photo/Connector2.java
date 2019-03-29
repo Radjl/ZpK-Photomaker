@@ -27,8 +27,6 @@ public class Connector2 {
 
 
 
-    @Value("${upload.pathphoto}")
-    private String uploadPath;
 
     @Autowired
     CarriageMassiveRepo carriageMassiveRepo;
@@ -84,8 +82,7 @@ public class Connector2 {
             for (int i = 0; i < descNodes.getLength(); i++) {
                 System.out.println("Состояние луча: - " + descNodes.item(i).getTextContent());
 
-                String desktop = System.getProperty("user.home")+"\\Desktop";
-                System.out.println(desktop);
+
 
 
                 if (descNodes.item(i).getTextContent().equalsIgnoreCase(on)) {
@@ -95,11 +92,11 @@ public class Connector2 {
                     System.out.println("Луч оборвался , Состояние установлено - 1");
 
 
-                    Date date = new Date();
 
 
 
-                    if (carriageMassive.getLastState() == 1 && carriageMassive.isPhotoDone() == false ){
+
+                    if (carriageMassive.getLastState() == 1 && !carriageMassive.isPhotoDone()){
                         System.out.println("Проверка на состояние и сделанное фото ");
 
 
@@ -115,7 +112,7 @@ public class Connector2 {
 
 
 
-                        String pathToSave = "C:\\Users\\sheludko\\Desktop\\temp\\img"+date.getTime()+".jpeg";
+                        String pathToSave = CheckOutPathToSave();
 
                         URLConnection conCam = new URL("http://10.100.100.28/Streaming/channels/1/picture?snapShotImageType=JPEG").openConnection();
                         System.out.println("Получаем соединение с камерой");
@@ -176,14 +173,21 @@ public class Connector2 {
         }
     }
 
+    private String CheckOutPathToSave() {
+        Date date = new Date();
+
+
+        return System.getProperty("user.home")+"\\Desktop\\temp\\img"+date.getTime()+".jpeg";
+    }
+
     private void CheckForSaveCarriageMassive(CarriageMassive carriageMassive) {
-        if (carriageMassive.timer > 100 && carriageMassive.getPhotos().size() > 7){
+        if (carriageMassive.timer > 100 && carriageMassive.getPhotos().size() > 1){
             carriageMassive.done = true;
             carriageMassiveRepo.save(carriageMassive);
             System.out.println("Новый обьект записан в базу и сохранён");
 
         }
-        if (carriageMassive.timer > 1000 && carriageMassive.getPhotos().size() < 7){
+        if (carriageMassive.timer > 1000 && carriageMassive.getPhotos().size() < 1){
             carriageMassive.done = true;
             System.out.println("обьект не записан , выход из цикла , пересоздание обьекта с нуля");
         }
@@ -201,7 +205,7 @@ public class Connector2 {
 
         doc = objDocumentBuilder.parse(stream);
     } catch (Exception ex) {
-        throw ex;
+        System.out.println(ex.getMessage());
     }
         stream.close();
     return doc;
