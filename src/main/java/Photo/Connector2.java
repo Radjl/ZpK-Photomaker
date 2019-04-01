@@ -1,14 +1,13 @@
 package Photo;
 
+import config.AppConfiguration;
 import models.CarriageMassive;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import repository.CarriageMassiveRepo;
-
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,7 +19,7 @@ import java.io.InputStream;
 import java.net.Authenticator;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Date;
+
 @Service
 public class Connector2 {
 
@@ -31,6 +30,9 @@ public class Connector2 {
     @Autowired
     CarriageMassiveRepo carriageMassiveRepo;
 
+    @Autowired
+    AppConfiguration appConfiguration;
+
 
     public Connector2() throws ParserConfigurationException, IOException, SAXException {
 
@@ -40,7 +42,7 @@ public class Connector2 {
 
     public void Start(CarriageMassive carriageMassive) throws Exception {
 
-        //
+
         String off = "up";
         String on = "dn";
 
@@ -101,7 +103,7 @@ public class Connector2 {
 
 
 
-                        Thread.sleep(2000);
+                        Thread.sleep(appConfiguration.getPhotoDelay());
                         System.out.println("Поток выспался - 2.5 секунд");
 
 
@@ -112,7 +114,7 @@ public class Connector2 {
 
 
 
-                        String pathToSave = CheckOutPathToSave();
+
 
                         URLConnection conCam = new URL("http://10.100.100.28/Streaming/channels/1/picture?snapShotImageType=JPEG").openConnection();
                         System.out.println("Получаем соединение с камерой");
@@ -122,7 +124,7 @@ public class Connector2 {
                         System.out.println("Буферизируем поток данных с камеры");
 
 
-                        File f = new File(pathToSave);
+                        File f = new File(appConfiguration.getUploadPathConnector());
                         System.out.println("Создаем файл с именем пути для сохранения");
 
                             String dbImagePathResult = f.getName();
@@ -173,21 +175,16 @@ public class Connector2 {
         }
     }
 
-    private String CheckOutPathToSave() {
-        Date date = new Date();
 
-
-        return System.getProperty("user.home")+"\\Desktop\\temp\\img"+date.getTime()+".jpeg";
-    }
 
     private void CheckForSaveCarriageMassive(CarriageMassive carriageMassive) {
-        if (carriageMassive.timer > 100 && carriageMassive.getPhotos().size() > 1){
+        if (carriageMassive.timer > 100 && carriageMassive.getPhotos().size() > 7){
             carriageMassive.done = true;
             carriageMassiveRepo.save(carriageMassive);
             System.out.println("Новый обьект записан в базу и сохранён");
 
         }
-        if (carriageMassive.timer > 1000 && carriageMassive.getPhotos().size() < 1){
+        if (carriageMassive.timer > 1000 && carriageMassive.getPhotos().size() < 7){
             carriageMassive.done = true;
             System.out.println("обьект не записан , выход из цикла , пересоздание обьекта с нуля");
         }
