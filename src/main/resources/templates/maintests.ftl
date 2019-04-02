@@ -16,13 +16,15 @@
     </div>
     <ul class="nav-list">
             <li class="nav-list-item">
-                <a href="/admin" class="nav-link">Панель администратора</a>
+                <a href="/ssetings" class="nav-link">Настройки</a>
             </li>
         <li class="nav-list-item">
 
         </li>
         <li class="nav-list-item">
-            <input id="datepicker" width="276" />
+           <form action="/filter" method="post" name="DataForm">
+            <input id="datepicker" name="date" placeholder="Выбрать по дате..." width="276" />
+           </form>
         </li>
     </ul>
 </nav>
@@ -102,11 +104,14 @@
 
 
 
+
+
 <script>
-    $('#datepicker').datepicker({
-        uiLibrary: 'bootstrap4'
-    });
+    var $datepicker = $('#datepicker').datepicker({ footer: true, modal: true, header: true, uiLibrary: 'bootstrap4',  change: function (e) {
+            document.forms["DataForm"].submit();
+        } });
 </script>
+
 
 <script>
     $('.carousel').carousel({
