@@ -29,33 +29,22 @@ public class HomeController {
     @Autowired
     CarriageService carriageService;
 
+
+
+
+
     @RequestMapping("/")
-    public String main(Model model){
-
-
-        Iterable<Carriage> carriages = carriageRepo.findAll();
-        List<CarriageMassive> carriagesMassive = carriageMassiveRepo.findAll();
-
-
-        model.addAttribute("carriage",carriages);
-        model.addAttribute("carriagemassive",carriagesMassive);
-        return "main2";
-    }
-
-
-
-    @RequestMapping("/test")
     public String main2(Model model){
 
 
 
         CarriageMassive lastcreated = carriageMassiveRepo.findFirstByOrderByIdDesc();
         Iterable<CarriageMassive> carriagesMassive2 = carriageService.findAllOrderByIdDescByOneDay();
+        Iterable<Carriage> carriages = carriageRepo.findAll();
 
 
 
-
-
+        model.addAttribute("cariage",carriages);
         model.addAttribute("carriagemassive2",carriagesMassive2);
         model.addAttribute("lastcreated",lastcreated);
         return "maintests";
@@ -65,19 +54,19 @@ public class HomeController {
     @PostMapping("/filter")
     public String filterByDate(@RequestParam String date, Model model) throws ParseException {
 
-
-
-
-
         CarriageMassive lastcreated = carriageMassiveRepo.findFirstByOrderByIdDesc();
         Iterable<CarriageMassive> carriagesMassive2 = carriageService.findAllByDate(date);
+        Iterable<Carriage> carriages = carriageRepo.findAll();
 
+
+
+        model.addAttribute("cariage",carriages);
 
 
 
         model.addAttribute("carriagemassive2",carriagesMassive2);
         model.addAttribute("lastcreated",lastcreated);
-        return "maintests";
+        return "redirect:/";
     }
 
 
@@ -86,7 +75,7 @@ public class HomeController {
         carriageRepo.deleteAll();
         carriageMassiveRepo.deleteAll();
 
-        return "main2";
+        return "maintests";
     }
 
 }

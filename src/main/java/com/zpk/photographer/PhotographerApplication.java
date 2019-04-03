@@ -1,6 +1,7 @@
 package com.zpk.photographer;
 
 import Photo.Connector2;
+import models.Carriage;
 import models.CarriageMassive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -29,6 +30,7 @@ public class PhotographerApplication implements CommandLineRunner {
             while (true){
 
                 CarriageMassive carriageMassive = new CarriageMassive();
+
                 System.out.println("Done");
 
 

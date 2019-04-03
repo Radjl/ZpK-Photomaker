@@ -1,6 +1,8 @@
 package Photo;
 
 import config.AppConfiguration;
+import lombok.NoArgsConstructor;
+import models.Carriage;
 import models.CarriageMassive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +10,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import repository.CarriageMassiveRepo;
+import repository.CarriageRepo;
+
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,23 +24,21 @@ import java.net.Authenticator;
 import java.net.URL;
 import java.net.URLConnection;
 
+
+@NoArgsConstructor
 @Service
 public class Connector2 {
 
 
 
-
+    @Autowired
+    private CarriageRepo carriageRepo;
 
     @Autowired
     CarriageMassiveRepo carriageMassiveRepo;
 
     @Autowired
     AppConfiguration appConfiguration;
-
-
-    public Connector2() throws ParserConfigurationException, IOException, SAXException {
-
-    }
 
 
 
@@ -58,17 +60,6 @@ public class Connector2 {
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
 
     private void ProcessConnectAlgorythm(CarriageMassive carriageMassive, String off, String on, MyAuthenticator myAuthenticator) throws IOException {
         try {
@@ -116,7 +107,7 @@ public class Connector2 {
 
 
 
-                        URLConnection conCam = new URL("http://10.100.100.28/Streaming/channels/1/picture?snapShotImageType=JPEG").openConnection();
+                        URLConnection conCam = new URL("http://10.100.100.132/Streaming/channels/1/picture?snapShotImageType=JPEG").openConnection();
                         System.out.println("Получаем соединение с камерой");
 
 
@@ -137,6 +128,9 @@ public class Connector2 {
 
 
                             carriageMassive.getPhotos().add(dbImagePathResult);
+                             Carriage carriage = new Carriage();
+                             carriage.getPhotos().add(dbImagePathResult);
+                             carriageRepo.save(carriage);
                         System.out.println("Добавляем фото в масив обьекта подач");
 
 
@@ -175,21 +169,21 @@ public class Connector2 {
         }
     }
 
-
-
     private void CheckForSaveCarriageMassive(CarriageMassive carriageMassive) {
         if (carriageMassive.timer > 100 && carriageMassive.getPhotos().size() > 7){
             carriageMassive.done = true;
             carriageMassiveRepo.save(carriageMassive);
+           // carriageRepo.deleteAll();
             System.out.println("Новый обьект записан в базу и сохранён");
 
         }
+
         if (carriageMassive.timer > 1000 && carriageMassive.getPhotos().size() < 7){
             carriageMassive.done = true;
+          //  carriageRepo.deleteAll();
             System.out.println("обьект не записан , выход из цикла , пересоздание обьекта с нуля");
         }
     }
-
 
     private Document parseXML(InputStream stream) throws Exception {
 
