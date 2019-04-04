@@ -42,7 +42,7 @@ public class HomeController {
         Iterable<CarriageMassive> carriagesMassive2 = carriageService.findAllOrderByIdDescByOneDay();
         Iterable<Carriage> carriages = carriageRepo.findAll();
 
-
+        System.out.println(((List<Carriage>) carriages).size());
 
         model.addAttribute("cariage",carriages);
         model.addAttribute("carriagemassive2",carriagesMassive2);
@@ -66,14 +66,14 @@ public class HomeController {
 
         model.addAttribute("carriagemassive2",carriagesMassive2);
         model.addAttribute("lastcreated",lastcreated);
-        return "redirect:/";
+        return "maintests";
     }
 
 
-    @PostMapping("/delete")
+    @RequestMapping("/delete")
     public String deleteShip(Model model){
         carriageRepo.deleteAll();
-        carriageMassiveRepo.deleteAll();
+
 
         return "maintests";
     }

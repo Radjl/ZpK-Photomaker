@@ -42,49 +42,56 @@
 
 
 
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 my-3">
-                <div class="pull-right">
-                    <div class="btn-group">
 
-                        <form method="post" action="/delete">
-                            <button type="submit" class="btn btn-danger" id="grid">Del</button>
-                        </form>
-                    </div>
+
+    <h2 class="text-center text-danger font-weight-bold">Идёт подача вагонов...</h2>
+
+    <#list cariage  as podacha>
+    <div class="container ">
+
+        <div class="carousel slide article-slide" id="${podacha.id}" data-ride="carousel">
+
+
+
+
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img  class="img-fluid bg-overlay">
                 </div>
-            </div>
-        </div>
-        <div id="products" class="row view-group">
-            <div class="item col-xs-4 col-lg-4">
-                <#list cariage as podacha>
-                    <div class="thumbnail card">
-                        <#if podacha.photos??>
-                            <div class="img-event">
-                                <#list podacha.photos as photo><img class="group list-group-image img-fluid" src="/img/ship/${photo}" alt="" /></#list>
-                            </div>
-                        </#if>
-                        <div class="caption card-body">
-                            <h4 class="group card-title inner list-group-item-heading">
-                            </h4>
-                            <p class="group inner list-group-item-text">
-                            </p>
-                            <div class="row">
-                                <div class="col-xs-12 col-md-6">
-                                    <p class="lead">    </p>
-                                </div>
-                                <div class="col-xs-12 col-md-6">
 
-                                </div>
-                            </div>
-                        </div>
+        <#list podacha.photos as photo>
+                    <div class="carousel-item">
+                        <img src="/img/ship/${photo}" class="img-fluid">
+
                     </div>
-                </#list>
+            </#list>
+
+
+
             </div>
+            <ol class="carousel-indicators">
 
+                <li data-target="$#{podacha.id}" data-slide-to="0" class="active">
+                    <img alt="" src="http://placehold.it/250x180">
+                </li>
+                <#list podacha.photos as photo>
 
+                    <li data-target="#${podacha.id}" data-slide-to="${photo_index + 1}">
+                        <img alt="" src="/img/ship/${photo}">
+                    </li>
+                </#list>
+            </ol>
+            <a href="#${podacha.id}" class="carousel-control-prev" data-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </a>
+            <a href="#${podacha.id}" class="carousel-control-next" data-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </a>
         </div>
+
+
     </div>
+    </#list>
 
 
 <#else >
@@ -176,7 +183,9 @@
 </script>
 
 
-<#include "parts/scripts.ftl">
+
+
+
 
 
 </body>

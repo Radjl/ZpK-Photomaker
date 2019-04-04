@@ -30,14 +30,14 @@ public class PhotographerApplication implements CommandLineRunner {
             while (true){
 
                 CarriageMassive carriageMassive = new CarriageMassive();
-
+                Carriage carriage = new Carriage();
                 System.out.println("Done");
 
 
 
 
              while (carriageMassive.done!=true) {
-                  connector2.Start(carriageMassive);
+                  connector2.Start(carriageMassive,carriage);
                   Thread.sleep(300);
               }
 

@@ -42,7 +42,7 @@ public class Connector2 {
 
 
 
-    public void Start(CarriageMassive carriageMassive) throws Exception {
+    public void Start(CarriageMassive carriageMassive, Carriage carriage) throws Exception {
 
 
         String off = "up";
@@ -56,12 +56,12 @@ public class Connector2 {
         Authenticator.setDefault(myAuthenticator);
 
         //Обработка
-        ProcessConnectAlgorythm(carriageMassive, off, on, myAuthenticator);
+        ProcessConnectAlgorythm(carriageMassive, off, on, myAuthenticator,carriage);
 
 
     }
 
-    private void ProcessConnectAlgorythm(CarriageMassive carriageMassive, String off, String on, MyAuthenticator myAuthenticator) throws IOException {
+    private void ProcessConnectAlgorythm(CarriageMassive carriageMassive, String off, String on, MyAuthenticator myAuthenticator, Carriage carriage) throws IOException {
         try {
             URLConnection con = new URL("http://admin:vkmodule@10.47.1.101/protect/status.xml").openConnection();
 
@@ -128,7 +128,7 @@ public class Connector2 {
 
 
                             carriageMassive.getPhotos().add(dbImagePathResult);
-                             Carriage carriage = new Carriage();
+
                              carriage.getPhotos().add(dbImagePathResult);
                              carriageRepo.save(carriage);
                         System.out.println("Добавляем фото в масив обьекта подач");
