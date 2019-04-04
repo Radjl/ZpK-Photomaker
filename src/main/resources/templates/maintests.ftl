@@ -15,8 +15,8 @@
 
     </div>
     <ul class="nav-list">
-            <li class="nav-list-item">
-                <a href="/ssetings" class="nav-link">Настройки</a>
+            <li class="nav-list-item ">
+             <#if (cariage?size > 1000)>   <a href="/ssetings"   class="nav-link">Настройки</a></#if>
             </li>
         <li class="nav-list-item">
 

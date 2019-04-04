@@ -8,14 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 import repository.CarriageMassiveRepo;
 import repository.CarriageRepo;
-
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +20,7 @@ import java.io.InputStream;
 import java.net.Authenticator;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Date;
 
 
 @NoArgsConstructor
@@ -63,7 +61,11 @@ public class Connector2 {
 
     private void ProcessConnectAlgorythm(CarriageMassive carriageMassive, String off, String on, MyAuthenticator myAuthenticator, Carriage carriage) throws IOException {
         try {
+
+           // File file = new File("C:\\Users\\sheludko\\Desktop\\test.xml");
+           // URL url = file.toURL();
             URLConnection con = new URL("http://admin:vkmodule@10.47.1.101/protect/status.xml").openConnection();
+           // URLConnection con = url.openConnection();
 
 
 
@@ -115,8 +117,12 @@ public class Connector2 {
                         System.out.println("Буферизируем поток данных с камеры");
 
 
-                        File f = new File(appConfiguration.getUploadPathConnector());
+                        Date date = new Date();
+                        String path =  System.getProperty("user.home")+"\\Desktop\\temp\\img"+date.getTime()+".jpeg";
+
+                        File f = new File(path);
                         System.out.println("Создаем файл с именем пути для сохранения");
+
 
                             String dbImagePathResult = f.getName();
                         System.out.println("Получаем имя файла: " + dbImagePathResult);
@@ -173,14 +179,18 @@ public class Connector2 {
         if (carriageMassive.timer > 100 && carriageMassive.getPhotos().size() > 7){
             carriageMassive.done = true;
             carriageMassiveRepo.save(carriageMassive);
-           // carriageRepo.deleteAll();
+            carriageRepo.deleteAll();
             System.out.println("Новый обьект записан в базу и сохранён");
 
         }
 
+        if (carriageMassive.timer > 100){
+            carriageRepo.deleteAll();
+        }
+
         if (carriageMassive.timer > 1000 && carriageMassive.getPhotos().size() < 7){
             carriageMassive.done = true;
-          //  carriageRepo.deleteAll();
+            carriageRepo.deleteAll();
             System.out.println("обьект не записан , выход из цикла , пересоздание обьекта с нуля");
         }
     }

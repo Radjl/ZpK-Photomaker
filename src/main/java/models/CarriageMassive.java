@@ -1,6 +1,7 @@
 package models;
 
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,12 +32,6 @@ public class CarriageMassive {
     private LinkedList<String> photos = new LinkedList<>();
     private int lastState = 0;
     private boolean photoDone = false;
-
-
-
-
-
-
 
 
 
