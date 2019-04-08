@@ -115,7 +115,7 @@
                     <h1>Дата подачи: ${podacha.getStartTime().getDayOfMonth()}-${podacha.getStartTime().getMonth().getValue()}-${podacha.getStartTime().getYear()?c}  </h1>
                     <p> <h1>Время подачи: ${podacha.getStartTime().getHour()} часов ${podacha.getStartTime().getMinute()} минут</h1> </p>
                     <p> <h1>Количество вагонов: ${podacha.getPhotos()?size -1}</h1> </p>
-                    <p><a class="btn btn-sm btn-dark" href="#" role="button">Удалить запись</a></p>
+                    <p><a class="btn btn-sm btn-dark" href="/delete2?data=${podacha.id?c}" type="submit"    role="button">Удалить запись</a></p>
                 </div>
             </div>
 

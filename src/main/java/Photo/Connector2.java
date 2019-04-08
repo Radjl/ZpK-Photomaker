@@ -10,6 +10,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import repository.CarriageMassiveRepo;
 import repository.CarriageRepo;
+
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -62,10 +63,10 @@ public class Connector2 {
     private void ProcessConnectAlgorythm(CarriageMassive carriageMassive, String off, String on, MyAuthenticator myAuthenticator, Carriage carriage) throws IOException {
         try {
 
-           // File file = new File("C:\\Users\\sheludko\\Desktop\\test.xml");
-           // URL url = file.toURL();
-            URLConnection con = new URL("http://admin:vkmodule@10.47.1.101/protect/status.xml").openConnection();
-           // URLConnection con = url.openConnection();
+               // File file = new File("C:\\Users\\sheludko\\Desktop\\test.xml");
+               // URL url = file.toURL();
+              URLConnection con = new URL(appConfiguration.getControllerUrl()).openConnection();
+              //  URLConnection con = url.openConnection();
 
 
 
@@ -89,15 +90,13 @@ public class Connector2 {
 
 
 
-
-
                     if (carriageMassive.getLastState() == 1 && !carriageMassive.isPhotoDone()){
                         System.out.println("Проверка на состояние и сделанное фото ");
 
 
 
                         Thread.sleep(appConfiguration.getPhotoDelay());
-                        System.out.println("Поток выспался - 2.5 секунд");
+                        System.out.println("Поток выспался - "+ appConfiguration.getPhotoDelay());
 
 
 
@@ -107,9 +106,7 @@ public class Connector2 {
 
 
 
-
-
-                        URLConnection conCam = new URL("http://10.100.100.132/Streaming/channels/1/picture?snapShotImageType=JPEG").openConnection();
+                        URLConnection conCam = new URL(appConfiguration.getCamUrl()).openConnection();
                         System.out.println("Получаем соединение с камерой");
 
 
@@ -170,8 +167,8 @@ public class Connector2 {
         }catch (Exception e){
             e.printStackTrace();
         }finally {
-            URLConnection con = new URL("http://admin:vkmodule@10.47.1.101/protect/status.xml").openConnection();
-            URLConnection conCam = new URL("http://10.100.100.28/Streaming/channels/1/picture?snapShotImageType=JPEG").openConnection();
+            URLConnection con = new URL(appConfiguration.getControllerUrl()).openConnection();
+            URLConnection conCam = new URL(appConfiguration.getCamUrl()).openConnection();
         }
     }
 
@@ -180,19 +177,26 @@ public class Connector2 {
             carriageMassive.done = true;
             carriageMassiveRepo.save(carriageMassive);
             carriageRepo.deleteAll();
+            appConfiguration.setPhotoDelay(1700);
             System.out.println("Новый обьект записан в базу и сохранён");
-
         }
+
 
         if (carriageMassive.timer > 100){
             carriageRepo.deleteAll();
         }
 
+
         if (carriageMassive.timer > 1000 && carriageMassive.getPhotos().size() < 7){
             carriageMassive.done = true;
             carriageRepo.deleteAll();
+            appConfiguration.setPhotoDelay(1700);
             System.out.println("обьект не записан , выход из цикла , пересоздание обьекта с нуля");
         }
+
+
+
+
     }
 
     private Document parseXML(InputStream stream) throws Exception {

@@ -78,7 +78,14 @@ public class HomeController {
         return "maintests";
     }
 
+    @RequestMapping("/delete2")
+    public String deleteShip2(Model model,@RequestParam String data){
 
+
+        carriageMassiveRepo.deleteById(Long.valueOf(data));
+
+        return "redirect:/";
+    }
 
 
 }
