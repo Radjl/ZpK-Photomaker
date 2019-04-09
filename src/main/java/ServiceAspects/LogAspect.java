@@ -19,8 +19,6 @@ public class LogAspect {
     @Pointcut("execution(* Photo.Connector2.Start(..))")
     private void all(){}
 
-    @Pointcut("execution(* Photo.Connector2.Start(..))")
-    private void selectGetName(){}
 
     @After("all()")
     public void log(){

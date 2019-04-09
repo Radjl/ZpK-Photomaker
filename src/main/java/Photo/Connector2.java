@@ -118,7 +118,6 @@ public class Connector2 {
                         logger.info("Создаем файл с именем пути для сохранения");
 
                             String dbImagePathResult = f.getName();
-                        System.out.println("Получаем имя файла: " + dbImagePathResult);
                         logger.info("Получаем имя файла: " + dbImagePathResult);
 
 
@@ -146,12 +145,12 @@ public class Connector2 {
 
 
                 }else if (descNodes.item(i).getTextContent().equalsIgnoreCase(off)){
-                    System.out.println("Луч не прерывался , состояние - 0 , Фото не сделано");
+                    logger.info("Луч не прерывался , состояние - 0 , Фото не сделано");
                     carriageMassive.setLastState(0);
                     carriageMassive.setPhotoDone(false);
                     carriageMassive.timer ++;
-                    System.out.println("Таймер увеличен " + "текущий счетчик таймера - " + carriageMassive.timer);
-                    System.out.println("");
+                    logger.info("Таймер увеличен " + "текущий счетчик таймера - " + carriageMassive.timer + "\n");
+
 
                 }
             }
