@@ -4,6 +4,8 @@ import config.AppConfiguration;
 import lombok.NoArgsConstructor;
 import models.Carriage;
 import models.CarriageMassive;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -28,7 +30,7 @@ import java.util.Date;
 @Service
 public class Connector2 {
 
-
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private CarriageRepo carriageRepo;
@@ -75,9 +77,8 @@ public class Connector2 {
 
             NodeList descNodes = doc.getElementsByTagName("btn0");
 
-            for (int i = 0; i < descNodes.getLength(); i++) {
-                System.out.println("Состояние луча: - " + descNodes.item(i).getTextContent());
-
+                for (int i = 0; i < descNodes.getLength(); i++) {
+                logger.info("Состояние луча: - " + descNodes.item(i).getTextContent());
 
 
 
@@ -85,19 +86,16 @@ public class Connector2 {
 
 
                     carriageMassive.setLastState(1);
-                    System.out.println("Луч оборвался , Состояние установлено - 1");
-
+                    logger.info("Луч оборвался , Состояние установлено - 1");
 
 
 
                     if (carriageMassive.getLastState() == 1 && !carriageMassive.isPhotoDone()){
-                        System.out.println("Проверка на состояние и сделанное фото ");
-
+                        logger.info("Проверка на состояние и сделанное фото ");
 
 
                         Thread.sleep(appConfiguration.getPhotoDelay());
-                        System.out.println("Поток выспался - "+ appConfiguration.getPhotoDelay());
-
+                        logger.info("Поток выспался - "+ appConfiguration.getPhotoDelay());
 
 
                         myAuthenticator.setUsername("admin");
@@ -107,42 +105,37 @@ public class Connector2 {
 
 
                         URLConnection conCam = new URL(appConfiguration.getCamUrl()).openConnection();
-                        System.out.println("Получаем соединение с камерой");
+                        logger.info("Получаем соединение с камерой");
 
 
                         BufferedImage bufferedImage = ImageIO.read(conCam.getInputStream());
-                        System.out.println("Буферизируем поток данных с камеры");
-
+                        logger.info("Буферизируем поток данных с камеры");
 
                         Date date = new Date();
                         String path =  System.getProperty("user.home")+"\\Desktop\\temp\\img"+date.getTime()+".jpeg";
 
                         File f = new File(path);
-                        System.out.println("Создаем файл с именем пути для сохранения");
-
+                        logger.info("Создаем файл с именем пути для сохранения");
 
                             String dbImagePathResult = f.getName();
                         System.out.println("Получаем имя файла: " + dbImagePathResult);
-
+                        logger.info("Получаем имя файла: " + dbImagePathResult);
 
 
                             ImageIO.write(bufferedImage,"JPEG",f);
-                        System.out.println("Записываем фото на диск");
-
+                        logger.info("Записываем фото на диск");
 
                             carriageMassive.getPhotos().add(dbImagePathResult);
 
                              carriage.getPhotos().add(dbImagePathResult);
                              carriageRepo.save(carriage);
-                        System.out.println("Добавляем фото в масив обьекта подач");
-
+                        logger.info("Добавляем фото в масив обьекта подач");
 
                             carriageMassive.timer = 0;
-                        System.out.println("Сбрасываем таймер, таймер после сброса = " + carriageMassive.timer);
+                        logger.info("Сбрасываем таймер, таймер после сброса = " + carriageMassive.timer);
 
                             carriageMassive.setPhotoDone(true);
-                        System.out.println("Выставляем флаг что фото готово");
-
+                        logger.info("Выставляем флаг что фото готово");
 
 
 
@@ -177,7 +170,7 @@ public class Connector2 {
             carriageMassive.done = true;
             carriageMassiveRepo.save(carriageMassive);
             carriageRepo.deleteAll();
-            System.out.println("Новый обьект записан в базу и сохранён");
+            logger.info("Новый обьект записан в базу и сохранён");
         }
 
 
@@ -189,7 +182,7 @@ public class Connector2 {
         if (carriageMassive.timer > 1000 && carriageMassive.getPhotos().size() < 7){
             carriageMassive.done = true;
             carriageRepo.deleteAll();
-            System.out.println("обьект не записан , выход из цикла , пересоздание обьекта с нуля");
+            logger.info("обьект не записан , выход из цикла , пересоздание обьекта с нуля");
         }
 
 
@@ -208,7 +201,7 @@ public class Connector2 {
 
         doc = objDocumentBuilder.parse(stream);
     } catch (Exception ex) {
-        System.out.println(ex.getMessage());
+        logger.debug("Ошибка парсера",ex.getMessage());
     }
         stream.close();
     return doc;

@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 
 @EnableAsync
-@SpringBootApplication(scanBasePackages = {"controllers","controllers","models","services","repository","config","Photo"})
+@SpringBootApplication(scanBasePackages = {"controllers","controllers","models","services","repository","config","Photo", "ServiceAspects"})
 @EnableJpaRepositories("repository")
 @EntityScan("models")
 public class PhotographerApplication implements CommandLineRunner {
