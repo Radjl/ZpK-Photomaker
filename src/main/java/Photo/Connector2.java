@@ -177,7 +177,6 @@ public class Connector2 {
             carriageMassive.done = true;
             carriageMassiveRepo.save(carriageMassive);
             carriageRepo.deleteAll();
-            appConfiguration.setPhotoDelay(1700);
             System.out.println("Новый обьект записан в базу и сохранён");
         }
 
@@ -190,7 +189,6 @@ public class Connector2 {
         if (carriageMassive.timer > 1000 && carriageMassive.getPhotos().size() < 7){
             carriageMassive.done = true;
             carriageRepo.deleteAll();
-            appConfiguration.setPhotoDelay(1700);
             System.out.println("обьект не записан , выход из цикла , пересоздание обьекта с нуля");
         }
 

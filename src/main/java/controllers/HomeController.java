@@ -39,12 +39,10 @@ public class HomeController {
             return "maintests";
         }
 
-
         CarriageMassive lastcreated = carriageMassiveRepo.findFirstByOrderByIdDesc();
         Iterable<CarriageMassive> carriagesMassive2 = carriageService.findAllOrderByIdDescByOneDay();
         Iterable<Carriage> carriages = carriageRepo.findAll();
 
-        System.out.println(((List<Carriage>) carriages).size());
 
         model.addAttribute("cariage",carriages);
         model.addAttribute("carriagemassive2",carriagesMassive2);
@@ -54,7 +52,7 @@ public class HomeController {
 
 
     @PostMapping("/filter")
-    public String filterByDate(@RequestParam String date, Model model, RedirectAttributes attributes) throws ParseException {
+    public String filterByDate(@RequestParam String date, RedirectAttributes attributes){
 
         CarriageMassive lastcreated = carriageMassiveRepo.findFirstByOrderByIdDesc();
         Iterable<CarriageMassive> carriagesMassive2 = carriageService.findAllByDate(date);
